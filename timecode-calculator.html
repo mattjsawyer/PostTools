@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Calculate timecode sums, differences, frame counts, runtimes, and bulk timecode totals across common post production frame rates, including drop-frame.">
+    <meta name="theme-color" content="#0d1011">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PostTools.app">
+    <meta property="og:title" content="Timecode Calculator | PostTools.app">
+    <meta property="og:description" content="Calculate timecode sums, differences, frame counts, runtimes, and bulk totals across common post production frame rates.">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Timecode Calculator | PostTools.app">
+    <meta name="twitter:description" content="Calculate timecode sums, differences, frame counts, runtimes, and bulk totals across common post production frame rates.">
+
+    <title>Timecode Calculator | PostTools.app</title>
+    <link rel="stylesheet" href="assets/styles.css">
+    <script defer src="assets/timecode-calculator.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Timecode Calculator",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "description": "Calculate timecode sums, differences, frame counts, runtimes, and bulk timecode totals across common post production frame rates.",
+        "inLanguage": "en"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">Skip to calculator</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="PostTools.app home">
+          <span class="brand-mark" aria-hidden="true">PT</span>
+          <span>PostTools.app</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="index.html#tools">Tools</a>
+          <a href="index.html#about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro-section tool-intro" aria-labelledby="page-title">
+        <div class="container intro-grid">
+          <div class="intro-copy">
+            <p class="eyebrow">Timecode</p>
+            <h1 id="page-title">Timecode Calculator</h1>
+            <p class="intro-text">
+              Calculate sums, differences, frame counts, runtimes, and bulk timecode totals across common post production frame rates.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-section">
+        <div class="container timecode-workspace">
+          <section class="calculator-section" id="calculator" aria-labelledby="calculator-title">
+            <form class="calculator-card" id="timecode-form">
+              <div class="calculator-heading">
+                <p class="eyebrow">Calculator</p>
+                <h2 id="calculator-title">Enter two timecodes</h2>
+              </div>
+
+              <div class="timecode-settings">
+                <div class="field-card">
+                  <label for="timecode-frame-rate">Frame rate</label>
+                  <select id="timecode-frame-rate" name="frame-rate">
+                    <option value="23.976-ndf">23.976 fps</option>
+                    <option value="24-ndf" selected>24 fps</option>
+                    <option value="25-ndf">25 fps</option>
+                    <option value="29.97-ndf">29.97 fps NDF</option>
+                    <option value="29.97-df">29.97 fps DF</option>
+                    <option value="30-ndf">30 fps</option>
+                    <option value="48-ndf">48 fps</option>
+                    <option value="50-ndf">50 fps</option>
+                    <option value="59.94-ndf">59.94 fps NDF</option>
+                    <option value="59.94-df">59.94 fps DF</option>
+                    <option value="60-ndf">60 fps</option>
+                  </select>
+                  <p>Use DF for broadcast 29.97/59.94 clocks.</p>
+                </div>
+              </div>
+
+              <fieldset class="solve-options timecode-solve-options">
+                <legend>Operation</legend>
+                <label>
+                  <input type="radio" name="timecode-operation" value="add" checked>
+                  <span>Add</span>
+                </label>
+                <label>
+                  <input type="radio" name="timecode-operation" value="subtract">
+                  <span>Subtract</span>
+                </label>
+                <label>
+                  <input type="radio" name="timecode-operation" value="difference">
+                  <span>Difference</span>
+                </label>
+              </fieldset>
+
+              <div class="input-grid timecode-input-grid">
+                <div class="field-card">
+                  <label for="timecode-a">Timecode A</label>
+                  <input id="timecode-a" name="timecode-a" type="text" inputmode="text" autocomplete="off" value="01:00:00:00" placeholder="01:00:00:00">
+                  <p>Format: HH:MM:SS:FF.</p>
+                </div>
+
+                <div class="field-card">
+                  <label for="timecode-b">Timecode B</label>
+                  <input id="timecode-b" name="timecode-b" type="text" inputmode="text" autocomplete="off" value="00:10:00:00" placeholder="00:10:00:00">
+                  <p>Use a semicolon for drop-frame if you prefer.</p>
+                </div>
+              </div>
+
+              <div class="calculator-actions timecode-actions">
+                <button class="button secondary-button" type="button" id="timecode-clear-button">Clear all</button>
+                <button class="button" type="button" id="timecode-copy-button">Copy result</button>
+              </div>
+
+              <details class="bulk-timecode-details" id="bulk-timecode-details">
+                <summary class="bulk-timecode-summary">Bulk Calculations</summary>
+
+                <div class="bulk-timecode-panel">
+                  <div class="field-card bulk-timecode-field">
+                    <label for="bulk-timecodes">Bulk timecodes</label>
+                    <textarea id="bulk-timecodes" name="bulk-timecodes" rows="8" spellcheck="false" autocomplete="off" placeholder="00:02:13:12&#10;+00:04:08:03&#10;-00:00:30:00&#10;*2&#10;/3"></textarea>
+                    <p>Use + or - with timecodes. Use * or / with numbers. Lines without an operator are added.</p>
+                  </div>
+
+                  <div class="calculator-actions timecode-actions">
+                    <button class="button secondary-button" type="button" id="bulk-clear-button">Clear bulk</button>
+                    <button class="button" type="button" id="bulk-copy-button">Copy bulk total</button>
+                  </div>
+                </div>
+              </details>
+            </form>
+          </section>
+
+          <aside class="result-card" aria-live="polite" aria-atomic="true">
+            <p class="eyebrow">Result</p>
+            <h2 id="timecode-result-headline">Result: 01:10:00:00</h2>
+            <dl class="result-list">
+              <div>
+                <dt id="timecode-result-code-label">Timecode</dt>
+                <dd id="timecode-result-code">01:10:00:00</dd>
+              </div>
+              <div>
+                <dt id="timecode-result-frames-label">Frames</dt>
+                <dd id="timecode-result-frames">100,800 frames</dd>
+              </div>
+              <div>
+                <dt id="timecode-result-runtime-label">Runtime</dt>
+                <dd id="timecode-result-runtime">1 hr 10 min 0 sec</dd>
+              </div>
+              <div>
+                <dt id="timecode-result-rate-label">Frame rate</dt>
+                <dd id="timecode-result-rate">24 fps</dd>
+              </div>
+            </dl>
+            <p class="preset-summary" id="timecode-copy-status"></p>
+            <p class="result-note" id="timecode-result-note">
+              Drop-frame mode skips timecode numbers, not video frames.
+            </p>
+          </aside>
+
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; 2026 PostTools.app.</p>
+        <a href="index.html" aria-label="Back to PostTools.app home">Home</a>
+      </div>
+    </footer>
+  </body>
+</html>

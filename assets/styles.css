@@ -46,12 +46,14 @@ a {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
 input:not([type="radio"]):not([type="checkbox"]),
-select {
+select,
+textarea {
   width: 100%;
   min-width: 0;
   min-height: 46px;
@@ -63,10 +65,15 @@ select {
 }
 
 input:not([type="radio"]):not([type="checkbox"]):focus,
-select:focus {
+select:focus,
+textarea:focus {
   border-color: rgb(111 211 192 / 72%);
   outline: 2px solid rgb(111 211 192 / 22%);
   outline-offset: 2px;
+}
+
+textarea {
+  resize: vertical;
 }
 
 input[readonly] {
@@ -345,7 +352,8 @@ h3 {
 }
 
 .bitrate-workspace,
-.transfer-workspace {
+.transfer-workspace,
+.timecode-workspace {
   display: grid;
   gap: 20px;
 }
@@ -360,7 +368,8 @@ h3 {
 }
 
 .bitrate-workspace > .calculator-section,
-.transfer-workspace > .calculator-section {
+.transfer-workspace > .calculator-section,
+.timecode-workspace > .calculator-section {
   padding: 0;
 }
 
@@ -465,6 +474,23 @@ h3 {
   margin-top: 24px;
 }
 
+.timecode-settings {
+  margin-top: 24px;
+}
+
+.timecode-input-grid {
+  margin-top: 24px;
+}
+
+.timecode-actions {
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.timecode-actions .button {
+  min-width: 132px;
+}
+
 .dimension-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -566,6 +592,10 @@ h3 {
   }
 
   .transfer-input-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .timecode-input-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -932,6 +962,30 @@ h3 {
   margin-top: 4px;
 }
 
+.bulk-timecode-details {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.bulk-timecode-summary {
+  color: var(--accent-strong);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.bulk-timecode-panel {
+  display: grid;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.bulk-timecode-field textarea {
+  min-height: 190px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  line-height: 1.5;
+}
+
 .presets-section,
 .sources-section {
   padding: 48px 0;
@@ -1166,7 +1220,8 @@ h3 {
   }
 
   .bitrate-workspace,
-  .transfer-workspace {
+  .transfer-workspace,
+  .timecode-workspace {
     grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.65fr);
     align-items: start;
   }
@@ -1174,7 +1229,8 @@ h3 {
   .bitrate-workspace > .calculator-section,
   .bitrate-workspace-main,
   .transfer-workspace > .calculator-section,
-  .transfer-workspace-main {
+  .transfer-workspace-main,
+  .timecode-workspace > .calculator-section {
     grid-column: 1;
   }
 
@@ -1184,7 +1240,8 @@ h3 {
   }
 
   .bitrate-workspace > .result-card,
-  .transfer-workspace > .result-card {
+  .transfer-workspace > .result-card,
+  .timecode-workspace > .result-card {
     grid-column: 2;
     grid-row: 1 / span 2;
   }
