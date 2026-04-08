@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Calculate file transfer time from file size and practical planning speeds for Thunderbolt, USB, NAS, Ethernet, media cards, and storage drives.">
+    <meta name="theme-color" content="#0d1011">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PostTools.app">
+    <meta property="og:title" content="File Transfer Time Calculator | PostTools.app">
+    <meta property="og:description" content="Calculate file transfer time from file size and practical interface speed presets.">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="File Transfer Time Calculator | PostTools.app">
+    <meta name="twitter:description" content="Calculate file transfer time from file size and practical interface speed presets.">
+
+    <title>File Transfer Time Calculator | PostTools.app</title>
+    <link rel="stylesheet" href="assets/styles.css">
+    <script defer src="assets/file-transfer-time-calculator.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "File Transfer Time Calculator",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "description": "Calculate file transfer time from file size and practical planning speeds for common post production interfaces.",
+        "inLanguage": "en"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">Skip to calculator</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="PostTools.app home">
+          <span class="brand-mark" aria-hidden="true">PT</span>
+          <span>PostTools.app</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="index.html#tools">Tools</a>
+          <a href="index.html#about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro-section tool-intro" aria-labelledby="page-title">
+        <div class="container intro-grid">
+          <div class="intro-copy">
+            <p class="eyebrow">Transfer</p>
+            <h1 id="page-title">File Transfer Time Calculator</h1>
+            <p class="intro-text">
+              Calculate how long a file transfer will take from file size and practical interface speed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-section">
+        <div class="container transfer-workspace">
+          <section class="calculator-section" id="calculator" aria-labelledby="calculator-title">
+            <form class="calculator-card" id="transfer-form">
+              <div class="calculator-heading">
+                <p class="eyebrow">Calculator</p>
+                <h2 id="calculator-title">Enter a file size and transfer speed</h2>
+              </div>
+
+              <div class="input-grid transfer-input-grid">
+                <div class="field-card">
+                  <label for="transfer-size-value">File size</label>
+                  <div class="compound-input">
+                    <input id="transfer-size-value" name="size" type="text" inputmode="decimal" autocomplete="off" value="100">
+                    <select id="transfer-size-unit" name="size-unit" aria-label="File size unit">
+                      <option value="KB">KB</option>
+                      <option value="MB">MB</option>
+                      <option value="GB" selected>GB</option>
+                      <option value="TB">TB</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-card">
+                  <label for="transfer-speed-value">Transfer speed</label>
+                  <div class="compound-input">
+                    <input id="transfer-speed-value" name="speed" type="text" inputmode="decimal" autocomplete="off" value="110">
+                    <select id="transfer-speed-unit" name="speed-unit" aria-label="Transfer speed unit">
+                      <option value="MBps" selected>MB/s</option>
+                      <option value="GBps">GB/s</option>
+                      <option value="Mbps">Mb/s</option>
+                      <option value="Gbps">Gb/s</option>
+                    </select>
+                  </div>
+                  <p>Use the actual copy speed when you know it, or choose a planning preset below.</p>
+                </div>
+              </div>
+
+              <div class="calculator-actions">
+                <button class="button secondary-button" type="button" id="transfer-clear-button">Clear all</button>
+              </div>
+            </form>
+          </section>
+
+          <aside class="result-card" aria-live="polite" aria-atomic="true">
+            <p class="eyebrow">Result</p>
+            <h2 id="transfer-result-headline">Transfer time: 15 min 9 sec</h2>
+            <dl class="result-list">
+              <div>
+                <dt>Transfer time</dt>
+                <dd id="transfer-result-time">15 min 9 sec</dd>
+              </div>
+              <div>
+                <dt>File size</dt>
+                <dd id="transfer-result-size">100 GB</dd>
+              </div>
+              <div>
+                <dt>Transfer speed</dt>
+                <dd id="transfer-result-speed">110 MB/s</dd>
+              </div>
+              <div>
+                <dt>Data per hour</dt>
+                <dd id="transfer-result-hourly">396 GB per hour</dd>
+              </div>
+            </dl>
+            <p class="preset-summary" id="transfer-preset-summary"></p>
+            <p class="result-note">
+              Practical rates are planning estimates. Actual transfers can be limited by the slowest device, cable, card reader, storage array, network load, or protocol overhead.
+            </p>
+          </aside>
+
+          <div class="transfer-workspace-main">
+            <section class="presets-section" id="presets" aria-labelledby="presets-title">
+              <div class="section-heading preset-heading">
+                <p class="eyebrow">Interface presets</p>
+                <h2 id="presets-title">Popular transfer speeds</h2>
+                <p>
+                  Practical planning rates for common post production transfer paths, with advertised rates shown for reference.
+                </p>
+              </div>
+
+              <div class="preset-controls" aria-label="Preset filters">
+                <label>
+                  Search
+                  <input id="transfer-preset-search" type="search" autocomplete="off" placeholder="Thunderbolt, USB, NAS">
+                </label>
+                <label>
+                  Interface group
+                  <select id="transfer-preset-group"></select>
+                </label>
+              </div>
+
+              <p class="preset-count" id="transfer-preset-count"></p>
+              <div class="preset-grid" id="transfer-preset-grid"></div>
+            </section>
+
+            <section class="sources-section" aria-labelledby="sources-title">
+              <div class="source-card">
+                <p class="eyebrow">Sources</p>
+                <h2 id="sources-title">Preset reference notes</h2>
+                <p>
+                  Preset buttons apply practical planning speeds. Spec and bus-speed references are included so advertised interface limits stay visible.
+                </p>
+                <ul class="source-list">
+                  <li><a href="https://newsroom.intel.com/client-computing/intel-introduces-thunderbolt-5-standard">Intel Thunderbolt 5 standard</a></li>
+                  <li><a href="https://www.dell.com/support/kbdoc/en-us/000060905/thunderbolt-3-40gbps-data-transfer-rate">Dell Thunderbolt 1-4 reference</a></li>
+                  <li><a href="https://www.usb.org/sites/default/files/usb_data_performance_language_usage_guidelines_jan_2024.pdf">USB-IF data performance guidelines</a></li>
+                  <li><a href="https://ethernetalliance.org/technology/ethernet-roadmap/">Ethernet Alliance roadmap</a></li>
+                  <li><a href="https://www.sdcard.org/developers/sd-standard-overview/bus-speed-default-speed-high-speed-uhs-sd-express/">SD Association bus speed reference</a></li>
+                  <li><a href="https://compactflash.org/card-types/">CompactFlash Association card types</a></li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; 2026 PostTools.app.</p>
+        <a href="index.html" aria-label="Back to PostTools.app home">Home</a>
+      </div>
+    </footer>
+  </body>
+</html>
