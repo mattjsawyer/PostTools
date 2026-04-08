@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Calculate video duration, target file size, or total bitrate with codec reference presets for ProRes, DNxHR, Cinema RAW Light, Blackmagic RAW, and REDCODE.">
+    <meta name="theme-color" content="#0d1011">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Post Tools">
+    <meta property="og:title" content="Bitrate Calculator | Post Tools">
+    <meta property="og:description" content="Calculate duration, target file size, or total bitrate for post production and encoding work.">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Bitrate Calculator | Post Tools">
+    <meta name="twitter:description" content="Calculate duration, target file size, or total bitrate for post production and encoding work.">
+
+    <title>Bitrate Calculator | Post Tools</title>
+    <link rel="stylesheet" href="assets/styles.css">
+    <script defer src="assets/bitrate-calculator.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Bitrate Calculator",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "description": "Calculate video duration, target file size, or total bitrate for post production and encoding work.",
+        "inLanguage": "en"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">Skip to calculator</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="Post Tools home">
+          <span class="brand-mark" aria-hidden="true">PT</span>
+          <span>Post Tools</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="index.html#tools">Tools</a>
+          <a href="index.html#about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro-section tool-intro" aria-labelledby="page-title">
+        <div class="container intro-grid">
+          <div class="intro-copy">
+            <p class="eyebrow">Encoding</p>
+            <h1 id="page-title">Bitrate Calculator</h1>
+            <p class="intro-text">
+              Calculate duration, target file size, or total bitrate from the other two values.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-section">
+        <div class="container bitrate-workspace">
+          <section class="calculator-section" id="calculator" aria-labelledby="calculator-title">
+            <form class="calculator-card" id="bitrate-form">
+            <div class="calculator-heading">
+              <p class="eyebrow">Calculator</p>
+              <h2 id="calculator-title">Input two values to calculate the third</h2>
+            </div>
+
+            <fieldset class="solve-options">
+              <legend>Calculate</legend>
+              <label>
+                <input type="radio" name="solve-for" value="size">
+                <span>File size</span>
+              </label>
+              <label>
+                <input type="radio" name="solve-for" value="duration">
+                <span>Duration</span>
+              </label>
+              <label>
+                <input type="radio" name="solve-for" value="bitrate" checked>
+                <span>Bitrate</span>
+              </label>
+            </fieldset>
+
+            <div class="input-grid">
+              <div class="field-card" data-field="size">
+                <label for="size-value">File size</label>
+                <div class="compound-input">
+                  <input id="size-value" name="size" type="text" inputmode="decimal" autocomplete="off" value="25">
+                  <select id="size-unit" name="size-unit" aria-label="File size unit">
+                    <option value="KB">KB</option>
+                    <option value="MB">MB</option>
+                    <option value="GB" selected>GB</option>
+                    <option value="TB">TB</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-card" data-field="duration">
+                <label for="duration-value">Duration</label>
+                <div class="compound-input">
+                  <input id="duration-value" name="duration" type="text" inputmode="decimal" autocomplete="off" value="90">
+                  <select id="duration-unit" name="duration-unit" aria-label="Duration unit">
+                    <option value="seconds">sec</option>
+                    <option value="minutes" selected>min</option>
+                    <option value="hours">hr</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-card" data-field="bitrate">
+                <label for="bitrate-value">Total bitrate</label>
+                <div class="compound-input">
+                  <input id="bitrate-value" name="bitrate" type="text" inputmode="decimal" autocomplete="off">
+                  <select id="bitrate-unit" name="bitrate-unit" aria-label="Bitrate unit">
+                    <option value="Kbps">kb/s</option>
+                    <option value="Mbps" selected>Mb/s</option>
+                    <option value="Gbps">Gb/s</option>
+                  </select>
+                </div>
+                <p>Total bitrate includes video and audio.</p>
+              </div>
+            </div>
+
+            <details class="audio-details">
+              <summary>Audio allowance</summary>
+              <div class="audio-panel">
+                <label class="checkbox-row" for="audio-enabled">
+                  <input id="audio-enabled" name="audio-enabled" type="checkbox">
+                  <span>Use audio allowance</span>
+                </label>
+                <div class="audio-row">
+                  <label for="audio-value">Audio bitrate</label>
+                  <div class="compound-input compact-input">
+                    <input id="audio-value" name="audio" type="text" inputmode="decimal" autocomplete="off" placeholder="320">
+                    <select id="audio-unit" name="audio-unit" aria-label="Audio bitrate unit">
+                      <option value="Kbps" selected>kb/s</option>
+                      <option value="Mbps">Mb/s</option>
+                      <option value="Gbps">Gb/s</option>
+                    </select>
+                  </div>
+                </div>
+                <p class="audio-suggestions">Common audio bitrates: 192 kb/s, 320 kb/s, 640 kb/s, 1.5 Mb/s.</p>
+              </div>
+            </details>
+
+            <div class="calculator-actions">
+              <button class="button secondary-button" type="button" id="clear-button">Clear all</button>
+            </div>
+            </form>
+          </section>
+
+          <aside class="result-card" aria-live="polite" aria-atomic="true">
+            <p class="eyebrow">Result</p>
+            <h2 id="result-headline">Enter two values</h2>
+            <dl class="result-list">
+              <div>
+                <dt>Duration</dt>
+                <dd id="result-duration">-</dd>
+              </div>
+              <div>
+                <dt>File size</dt>
+                <dd id="result-size">-</dd>
+              </div>
+              <div>
+                <dt>Total bitrate</dt>
+                <dd id="result-bitrate">-</dd>
+              </div>
+              <div>
+                <dt>Storage rate</dt>
+                <dd id="result-hourly">-</dd>
+              </div>
+            </dl>
+            <p class="audio-summary" id="audio-summary"></p>
+            <p class="result-note">
+              Container overhead, metadata, and variable-bitrate encoding can move the final file size slightly.
+            </p>
+          </aside>
+
+          <div class="bitrate-workspace-main">
+            <section class="presets-section" id="presets" aria-labelledby="presets-title">
+              <div class="section-heading preset-heading">
+                <p class="eyebrow">Reference bitrates</p>
+                <h2 id="presets-title">Popular codec presets</h2>
+                <p>
+                  Planning targets for common post production codecs, resolutions, and frame rates.
+                </p>
+              </div>
+
+              <div class="preset-controls" aria-label="Preset filters">
+                <label>
+                  Search
+                  <input id="preset-search" type="search" autocomplete="off" placeholder="ProRes 422 UHD 30">
+                </label>
+                <label>
+                  Codec family
+                  <select id="preset-family"></select>
+                </label>
+                <label>
+                  Resolution
+                  <select id="preset-resolution"></select>
+                </label>
+                <label>
+                  Frame rate
+                  <select id="preset-fps"></select>
+                </label>
+              </div>
+
+              <p class="preset-count" id="preset-count"></p>
+              <div class="preset-grid" id="preset-grid"></div>
+            </section>
+
+            <section class="sources-section" aria-labelledby="sources-title">
+              <div class="source-card">
+                <p class="eyebrow">Sources</p>
+                <h2 id="sources-title">Preset reference notes</h2>
+                <p>
+                  Codec rates are planning references. Camera RAW modes, constant-quality modes, and delivery encodes can vary by settings and image content.
+                </p>
+                <ul class="source-list">
+                  <li><a href="https://www.apple.com/final-cut-pro/docs/Apple_ProRes_White_Paper.pdf">Apple ProRes White Paper</a></li>
+                  <li><a href="https://avidtech.my.salesforce-sites.com/pkb/articles/en_US/Knowledge/DNxHR-Codec-Bandwidth-Specifications">Avid DNxHR Codec Bandwidth Specifications</a></li>
+                  <li><a href="https://www.canon.com.cn/product/eosc400/record1.html">Canon EOS C400 recording formats</a></li>
+                  <li><a href="https://www.blackmagicdesign.com/products/blackmagiccinemacamera/techspecs">Blackmagic Cinema Camera 6K technical specifications</a></li>
+                  <li><a href="https://www.red.com/power-of-red-redcode">RED Power of REDCODE</a></li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; 2026 Post Tools.</p>
+        <a href="index.html" aria-label="Back to Post Tools home">Home</a>
+      </div>
+    </footer>
+  </body>
+</html>

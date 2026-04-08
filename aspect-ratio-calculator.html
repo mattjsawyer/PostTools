@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Calculate resolution width or height from common cinema, broadcast, and social media aspect ratios.">
+    <meta name="theme-color" content="#0d1011">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Post Tools">
+    <meta property="og:title" content="Aspect Ratio Calculator | Post Tools">
+    <meta property="og:description" content="Calculate matching width or height from common frame aspect ratios.">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Aspect Ratio Calculator | Post Tools">
+    <meta name="twitter:description" content="Calculate matching width or height from common frame aspect ratios.">
+
+    <title>Aspect Ratio Calculator | Post Tools</title>
+    <link rel="stylesheet" href="assets/styles.css">
+    <script defer src="assets/aspect-ratio-calculator.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Aspect Ratio Calculator",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "description": "Calculate resolution width or height from common cinema, broadcast, and social media aspect ratios.",
+        "inLanguage": "en"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">Skip to calculator</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="Post Tools home">
+          <span class="brand-mark" aria-hidden="true">PT</span>
+          <span>Post Tools</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="index.html#tools">Tools</a>
+          <a href="index.html#about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro-section tool-intro" aria-labelledby="page-title">
+        <div class="container intro-grid">
+          <div class="intro-copy">
+            <p class="eyebrow">Resolution</p>
+            <h1 id="page-title">Aspect Ratio Calculator</h1>
+            <p class="intro-text">
+              Calculate matching pixel dimensions for cinema, delivery, and social frame sizes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="calculator-section" id="calculator" aria-labelledby="calculator-title">
+        <form class="container calculator-layout aspect-layout" id="aspect-ratio-form">
+          <section class="calculator-card aspect-calculator-card">
+            <div class="calculator-heading">
+              <div>
+                <p class="eyebrow">Calculator</p>
+                <h2 id="calculator-title">Enter one dimension and choose a ratio</h2>
+              </div>
+            </div>
+
+            <fieldset class="solve-options aspect-solve-options">
+              <legend>Calculate</legend>
+              <label>
+                <input type="radio" name="solve-for" value="width">
+                <span>X width</span>
+              </label>
+              <label>
+                <input type="radio" name="solve-for" value="height" checked>
+                <span>Y height</span>
+              </label>
+            </fieldset>
+
+            <div class="dimension-grid">
+              <div class="field-card" data-field="width">
+                <label for="width-value">X width</label>
+                <input id="width-value" name="width" type="text" inputmode="numeric" autocomplete="off" value="3840">
+                <p>Pixels wide.</p>
+              </div>
+
+              <div class="field-card" data-field="height">
+                <label for="height-value">Y height</label>
+                <input id="height-value" name="height" type="text" inputmode="numeric" autocomplete="off">
+                <p>Pixels tall.</p>
+              </div>
+            </div>
+
+            <div class="calculator-actions">
+              <button class="button secondary-button" type="button" id="aspect-clear-button">Clear all</button>
+            </div>
+          </section>
+
+          <section class="result-card visualization-card" aria-labelledby="visualization-title" aria-live="polite" aria-atomic="true">
+            <p class="eyebrow">Visualization</p>
+            <h2 id="visualization-title">16:9 reference frame</h2>
+            <p class="visualization-copy">Grey bars mark the difference from the selected frame ratio.</p>
+
+            <div class="visual-stage">
+              <div class="reference-frame" id="aspect-visual-frame" role="img" aria-label="16:9 reference with a 16:9 selected frame at 3840 by 2160 pixels.">
+                <div class="visual-bar visual-bar-top" aria-hidden="true"></div>
+                <div class="visual-bar visual-bar-right" aria-hidden="true"></div>
+                <div class="visual-bar visual-bar-bottom" aria-hidden="true"></div>
+                <div class="visual-bar visual-bar-left" aria-hidden="true"></div>
+                <div class="target-frame" aria-hidden="true"></div>
+                <span class="visual-dimension visual-dimension-x" id="visual-x-label">X 3840 px</span>
+                <span class="visual-dimension visual-dimension-y" id="visual-y-label">Y 2160 px</span>
+              </div>
+            </div>
+
+            <dl class="result-list visualization-results">
+              <div>
+                <dt>Selected ratio</dt>
+                <dd id="result-ratio">16:9 (1.78)</dd>
+              </div>
+              <div>
+                <dt>Resolution</dt>
+                <dd id="result-resolution">3840 x 2160 px</dd>
+              </div>
+              <div>
+                <dt>Compared to 16:9</dt>
+                <dd id="result-comparison">Matches 16:9</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="calculator-card ratio-card">
+            <section class="ratio-picker" aria-labelledby="ratio-picker-title">
+              <div class="ratio-picker-heading">
+                <p class="eyebrow">Aspect ratios</p>
+                <h3 id="ratio-picker-title">Choose a frame ratio</h3>
+                <p id="selected-ratio-summary">Selected: 16:9 (1.78)</p>
+              </div>
+
+              <div class="ratio-controls">
+                <div class="ratio-filter">
+                  <label for="ratio-filter">
+                    Filter
+                    <select id="ratio-filter" name="ratio-filter">
+                      <option value="">All ratios</option>
+                      <option value="film-tv">Film/TV</option>
+                      <option value="social">Social</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="custom-ratio">
+                  <label for="custom-ratio-value">
+                    Custom ratio
+                    <input id="custom-ratio-value" name="custom-ratio" type="text" inputmode="decimal" autocomplete="off" placeholder="2.39 or 16:9">
+                  </label>
+                </div>
+              </div>
+
+              <div class="ratio-table-wrap">
+                <table class="ratio-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Type</th>
+                      <th scope="col">Ratio</th>
+                      <th scope="col">Decimal</th>
+                      <th scope="col">Select</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-ratio-group="social">
+                      <td>Social</td>
+                      <td>9:16</td>
+                      <td>0.56</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="social-9-16" data-ratio="0.5625" data-ratio-label="9:16" data-decimal-label="0.56">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv social">
+                      <td>Film/TV, Social</td>
+                      <td>4:5</td>
+                      <td>0.80</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="shared-4-5" data-ratio="0.8" data-ratio-label="4:5" data-decimal-label="0.80">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="social">
+                      <td>Social</td>
+                      <td>1:1</td>
+                      <td>1.00</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="social-1-1" data-ratio="1" data-ratio-label="1:1" data-decimal-label="1.00">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv social">
+                      <td>Film/TV, Social</td>
+                      <td>5:4</td>
+                      <td>1.25</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="shared-5-4" data-ratio="1.25" data-ratio-label="5:4" data-decimal-label="1.25">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>4:3</td>
+                      <td>1.33</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-4-3" data-ratio="1.3333333333" data-ratio-label="4:3" data-decimal-label="1.33">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="social">
+                      <td>Social</td>
+                      <td>3:2</td>
+                      <td>1.50</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="social-3-2" data-ratio="1.5" data-ratio-label="3:2" data-decimal-label="1.50">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>5:3</td>
+                      <td>1.66</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-5-3" data-ratio="1.6666666667" data-ratio-label="5:3" data-decimal-label="1.66">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>16:9</td>
+                      <td>1.78</td>
+                      <td><button class="ratio-table-button is-selected" type="button" data-ratio-id="film-tv-16-9" data-ratio="1.7777777778" data-ratio-label="16:9" data-decimal-label="1.78" aria-pressed="true">Selected</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>1.85</td>
+                      <td>1.85</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-1-85" data-ratio="1.85" data-ratio-label="1.85" data-decimal-label="1.85">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>1.90</td>
+                      <td>1.90</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-1-90" data-ratio="1.9" data-ratio-label="1.90" data-decimal-label="1.90">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv social">
+                      <td>Film/TV, Social</td>
+                      <td>2:1</td>
+                      <td>2.00</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="shared-2-1" data-ratio="2" data-ratio-label="2:1" data-decimal-label="2.00">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>2.35</td>
+                      <td>2.35</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-2-35" data-ratio="2.35" data-ratio-label="2.35" data-decimal-label="2.35">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>2.37</td>
+                      <td>2.37</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-2-37" data-ratio="2.37" data-ratio-label="2.37" data-decimal-label="2.37">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>2.39</td>
+                      <td>2.39</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-2-39" data-ratio="2.39" data-ratio-label="2.39" data-decimal-label="2.39">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>2.40</td>
+                      <td>2.40</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-2-40" data-ratio="2.4" data-ratio-label="2.40" data-decimal-label="2.40">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>2.44</td>
+                      <td>2.44</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-2-44" data-ratio="2.44" data-ratio-label="2.44" data-decimal-label="2.44">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>2.55</td>
+                      <td>2.55</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-2-55" data-ratio="2.55" data-ratio-label="2.55" data-decimal-label="2.55">Use</button></td>
+                    </tr>
+                    <tr data-ratio-group="film-tv">
+                      <td>Film/TV</td>
+                      <td>2.66</td>
+                      <td>2.66</td>
+                      <td><button class="ratio-table-button" type="button" data-ratio-id="film-tv-2-66" data-ratio="2.66" data-ratio-label="2.66" data-decimal-label="2.66">Use</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; 2026 Post Tools.</p>
+        <a href="index.html" aria-label="Back to Post Tools home">Home</a>
+      </div>
+    </footer>
+  </body>
+</html>
