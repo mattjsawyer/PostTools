@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="Calculate video duration, target file size, or total bitrate with codec reference presets for ProRes, DNxHR, Cinema RAW Light, Blackmagic RAW, and REDCODE.">
+    <meta name="description" content="Calculate video duration, target file size, or total bitrate with verified bitrate presets for Canon, Sony, Panasonic, DJI, GoPro, ARRI, ProRes, DNxHR, Blackmagic RAW, and REDCODE.">
     <meta name="theme-color" content="#0d1011">
 
     <meta property="og:type" content="website">
@@ -188,7 +188,7 @@
                 <p class="eyebrow">Reference bitrates</p>
                 <h2 id="presets-title">Popular codec presets</h2>
                 <p>
-                  Planning targets for common post production codecs, resolutions, and frame rates.
+                  Planning targets for common post production codecs, cameras, resolutions, and frame rates.
                 </p>
               </div>
 
@@ -196,6 +196,10 @@
                 <label>
                   Search
                   <input id="preset-search" type="search" autocomplete="off" placeholder="ProRes 422 UHD 30">
+                </label>
+                <label>
+                  Brand
+                  <select id="preset-brand"></select>
                 </label>
                 <label>
                   Codec family
@@ -220,15 +224,9 @@
                 <p class="eyebrow">Sources</p>
                 <h2 id="sources-title">Preset reference notes</h2>
                 <p>
-                  Codec rates are planning references. Camera RAW modes, constant-quality modes, and delivery encodes can vary by settings and image content.
+                  Codec rates are planning references. Source links are official vendor pages or official vendor calculators used for this preset library.
                 </p>
-                <ul class="source-list">
-                  <li><a href="https://www.apple.com/final-cut-pro/docs/Apple_ProRes_White_Paper.pdf">Apple ProRes White Paper</a></li>
-                  <li><a href="https://avidtech.my.salesforce-sites.com/pkb/articles/en_US/Knowledge/DNxHR-Codec-Bandwidth-Specifications">Avid DNxHR Codec Bandwidth Specifications</a></li>
-                  <li><a href="https://www.canon.com.cn/product/eosc400/record1.html">Canon EOS C400 recording formats</a></li>
-                  <li><a href="https://www.blackmagicdesign.com/products/blackmagiccinemacamera/techspecs">Blackmagic Cinema Camera 6K technical specifications</a></li>
-                  <li><a href="https://www.red.com/power-of-red-redcode">RED Power of REDCODE</a></li>
-                </ul>
+                <ul class="source-list" id="source-list"></ul>
               </div>
             </section>
           </div>

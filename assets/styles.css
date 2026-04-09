@@ -1035,16 +1035,68 @@ h3 {
   padding: 18px;
 }
 
+.preset-card.is-max-cap {
+  border-color: rgb(111 211 192 / 28%);
+}
+
 .preset-card-header {
   display: grid;
   gap: 8px;
 }
 
+.preset-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.preset-brand,
 .preset-family,
+.preset-codec,
 .preset-card-header p,
 .preset-note,
-.preset-empty {
+.preset-empty,
+.source-note {
   margin: 0;
+}
+
+.preset-brand {
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.preset-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.preset-tag.is-max-cap {
+  border-color: rgb(111 211 192 / 36%);
+  background: rgb(111 211 192 / 10%);
+  color: var(--accent-strong);
+}
+
+.preset-card-header h3 {
+  margin: 0;
+}
+
+.preset-codec {
+  color: var(--text);
+  font-weight: 700;
 }
 
 .preset-card-header p,
@@ -1107,9 +1159,19 @@ h3 {
   color: var(--muted);
 }
 
+.source-list li {
+  display: grid;
+  gap: 4px;
+}
+
 .source-list a {
   color: var(--text);
   font-weight: 700;
+}
+
+.source-note {
+  color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .source-list a:hover,
