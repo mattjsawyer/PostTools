@@ -17,13 +17,19 @@
         card: document.querySelector('[data-field="height"]'),
         input: document.getElementById("height-value"),
       },
+      ratio: {
+        card: document.querySelector('[data-field="ratio"]'),
+        input: document.getElementById("ratio-value"),
+      },
     };
 
     const clearButton = document.getElementById("aspect-clear-button");
+    const ratioCard = document.querySelector(".ratio-card");
     const ratioFilter = document.getElementById("ratio-filter");
     const customRatioInput = document.getElementById("custom-ratio-value");
     const ratioButtons = Array.from(document.querySelectorAll(".ratio-table-button"));
     const ratioRows = Array.from(document.querySelectorAll("[data-ratio-group]"));
+    const knownRatios = buildKnownRatios(ratioButtons);
     const selectedRatioSummary = document.getElementById("selected-ratio-summary");
     const resultRatio = document.getElementById("result-ratio");
     const resultResolution = document.getElementById("result-resolution");
@@ -43,6 +49,8 @@
       label: selectedRatioLabel,
       decimalLabel: selectedDecimalLabel,
     };
+    let previousSolveFor = getSolveFor();
+    let lastCalculatedRatioDetails = null;
 
     form.addEventListener("submit", (event) => event.preventDefault());
     form.addEventListener("input", calculate);
@@ -90,42 +98,62 @@
 
     function calculate() {
       const solveFor = getSolveFor();
-      const sourceField = solveFor === "height" ? "width" : "height";
-      const solvedField = solveFor;
-      const sourceValue = parseDimension(fields[sourceField].input.value);
-      let width = solveFor === "height" ? sourceValue : null;
-      let height = solveFor === "width" ? sourceValue : null;
 
-      syncSolvedField(solvedField);
-
-      if (solveFor === "height" && isPositive(width) && isPositive(selectedRatio)) {
-        height = width / selectedRatio;
-        updateSolvedInput("height", height);
-      } else if (solveFor === "width" && isPositive(height) && isPositive(selectedRatio)) {
-        width = height * selectedRatio;
-        updateSolvedInput("width", width);
-      } else {
-        fields[solvedField].input.value = "";
+      if (previousSolveFor === "ratio" && solveFor !== "ratio" && hasUsableRatio(lastCalculatedRatioDetails)) {
+        applyCalculatedRatio(lastCalculatedRatioDetails);
       }
 
-      updateSelectedRatioSummary();
-      updateVisualizationFrame();
+      let width = parseDimension(fields.width.input.value);
+      let height = parseDimension(fields.height.input.value);
+      let ratioDetails = solveFor === "ratio"
+        ? buildCalculatedRatioDetails(width, height, knownRatios)
+        : buildSelectedRatioDetails();
 
-      if (!isPositive(width) || !isPositive(height)) {
-        showEmptyResult();
+      syncSolvedField(solveFor);
+      syncRatioControls(solveFor);
+
+      if (solveFor === "height") {
+        height = isPositive(width) && isPositive(ratioDetails.ratio) ? width / ratioDetails.ratio : null;
+        updateSolvedInput("height", height);
+      } else if (solveFor === "width") {
+        width = isPositive(height) && isPositive(ratioDetails.ratio) ? height * ratioDetails.ratio : null;
+        updateSolvedInput("width", width);
+      }
+
+      if (solveFor === "ratio") {
+        ratioDetails = buildCalculatedRatioDetails(width, height, knownRatios);
+        lastCalculatedRatioDetails = hasUsableRatio(ratioDetails) ? ratioDetails : null;
+      }
+
+      updateRatioField(ratioDetails);
+      updateSelectedRatioSummary(solveFor, ratioDetails);
+      updateVisualizationFrame(ratioDetails.ratio);
+
+      if (!isPositive(width) || !isPositive(height) || !isPositive(ratioDetails.ratio)) {
+        previousSolveFor = solveFor;
+        showEmptyResult(ratioDetails);
         return;
       }
 
-      updateResult(Math.round(width), Math.round(height));
+      updateResult(Math.round(width), Math.round(height), ratioDetails);
+      previousSolveFor = solveFor;
     }
 
-    function syncSolvedField(solvedField) {
+    function syncSolvedField(solveFor) {
       Object.entries(fields).forEach(([fieldName, field]) => {
-        const isSolved = fieldName === solvedField;
+        const isRatioField = fieldName === "ratio";
+        const isSolved = solveFor === "ratio"
+          ? isRatioField
+          : !isRatioField && fieldName === solveFor;
+        const isInput = solveFor === "ratio"
+          ? !isRatioField
+          : !isRatioField && fieldName !== solveFor;
+        const isReadOnly = isRatioField || isSolved;
+
         field.card.classList.toggle("is-solved", isSolved);
-        field.card.classList.toggle("is-input", !isSolved);
-        field.input.readOnly = isSolved;
-        field.input.setAttribute("aria-readonly", String(isSolved));
+        field.card.classList.toggle("is-input", isInput);
+        field.input.readOnly = isReadOnly;
+        field.input.setAttribute("aria-readonly", String(isReadOnly));
       });
     }
 
@@ -133,53 +161,57 @@
       fields[fieldName].input.value = formatPixelValue(value);
     }
 
-    function updateSelectedRatioSummary() {
-      const ratioText = formatRatioText();
-      selectedRatioSummary.textContent = `Selected: ${ratioText}`;
-      resultRatio.textContent = ratioText;
+    function updateRatioField(ratioDetails) {
+      fields.ratio.input.value = isPositive(ratioDetails.ratio) ? ratioDetails.text : "";
     }
 
-    function updateResult(width, height) {
+    function updateSelectedRatioSummary(solveFor, ratioDetails) {
+      const prefix = solveFor === "ratio" ? "Calculated" : "Selected";
+      selectedRatioSummary.textContent = `${prefix}: ${ratioDetails.text}`;
+      resultRatio.textContent = ratioDetails.text;
+    }
+
+    function updateResult(width, height, ratioDetails) {
       resultResolution.textContent = `${formatInteger(width)} x ${formatInteger(height)} px`;
-      resultComparison.textContent = getComparisonText();
+      resultComparison.textContent = getComparisonText(ratioDetails.ratio);
       visualXLabel.textContent = `X ${formatInteger(width)} px`;
       visualYLabel.textContent = `Y ${formatInteger(height)} px`;
       visualFrame.setAttribute(
         "aria-label",
-        `16:9 reference with a ${selectedRatioLabel} selected frame at ${formatInteger(width)} by ${formatInteger(height)} pixels.`
+        `16:9 reference with a ${ratioDetails.text} frame at ${formatInteger(width)} by ${formatInteger(height)} pixels.`
       );
     }
 
-    function showEmptyResult() {
+    function showEmptyResult(ratioDetails) {
       resultResolution.textContent = "-";
-      resultComparison.textContent = getComparisonText();
+      resultComparison.textContent = getComparisonText(ratioDetails.ratio);
       visualXLabel.textContent = "X -";
       visualYLabel.textContent = "Y -";
       visualFrame.setAttribute(
         "aria-label",
-        `16:9 reference with a ${selectedRatioLabel} selected frame. Enter a valid pixel dimension for the calculated resolution.`
+        `16:9 reference with a ${ratioDetails.text} frame. Enter valid values to calculate the resolution.`
       );
     }
 
-    function updateVisualizationFrame() {
+    function updateVisualizationFrame(ratioValue) {
       let targetWidth = 100;
       let targetHeight = 100;
 
-      if (!isPositive(selectedRatio)) {
+      if (!isPositive(ratioValue)) {
         visualFrame.style.setProperty("--target-width", "100%");
         visualFrame.style.setProperty("--target-height", "100%");
         return;
       }
 
-      const ratioDelta = selectedRatio - referenceRatio;
+      const ratioDelta = ratioValue - referenceRatio;
 
       if (Math.abs(ratioDelta) < 0.001) {
         targetWidth = 100;
         targetHeight = 100;
       } else if (ratioDelta > 0) {
-        targetHeight = (referenceRatio / selectedRatio) * 100;
+        targetHeight = (referenceRatio / ratioValue) * 100;
       } else {
-        targetWidth = (selectedRatio / referenceRatio) * 100;
+        targetWidth = (ratioValue / referenceRatio) * 100;
       }
 
       visualFrame.style.setProperty("--target-width", `${clamp(targetWidth, 0, 100)}%`);
@@ -202,6 +234,15 @@
       ratioRows.forEach((row) => {
         const groups = row.dataset.ratioGroup.split(" ");
         row.hidden = Boolean(filter) && !groups.includes(filter);
+      });
+    }
+
+    function syncRatioControls(solveFor) {
+      const disabled = solveFor === "ratio";
+      ratioCard.classList.toggle("is-disabled", disabled);
+
+      [ratioFilter, customRatioInput, ...ratioButtons].forEach((control) => {
+        control.disabled = disabled;
       });
     }
 
@@ -231,33 +272,60 @@
       selectedDecimalLabel = lastTableRatio.decimalLabel;
     }
 
+    function applyCalculatedRatio(ratioDetails) {
+      selectedRatioId = "custom";
+      selectedRatio = ratioDetails.ratio;
+      selectedRatioLabel = ratioDetails.label;
+      selectedDecimalLabel = ratioDetails.decimalLabel;
+      customRatioInput.value = ratioDetails.label;
+      markSelectedRatio();
+    }
+
+    function buildSelectedRatioDetails() {
+      if (!isPositive(selectedRatio)) {
+        return {
+          ratio: null,
+          label: "",
+          decimalLabel: "",
+          text: "Enter a valid aspect ratio",
+        };
+      }
+
+      return buildRatioDetails(selectedRatio, selectedRatioLabel, selectedDecimalLabel);
+    }
+
+    function buildCalculatedRatioDetails(width, height, ratioOptions) {
+      if (!isPositive(width) || !isPositive(height)) {
+        return {
+          ratio: null,
+          label: "",
+          decimalLabel: "",
+          text: "Enter two valid dimensions",
+        };
+      }
+
+      const ratio = width / height;
+      const decimalLabel = formatDecimalRatio(ratio);
+      const matchedLabel = findKnownRatioLabel(ratio, ratioOptions);
+      const label = matchedLabel || buildReducedRatioLabel(width, height) || decimalLabel;
+      return buildRatioDetails(ratio, label, decimalLabel);
+    }
+
     function getSolveFor() {
       const selected = document.querySelector('input[name="solve-for"]:checked');
       return selected ? selected.value : "height";
     }
 
-    function getComparisonText() {
-      if (!isPositive(selectedRatio)) {
+    function getComparisonText(ratioValue) {
+      if (!isPositive(ratioValue)) {
         return "-";
       }
 
-      if (Math.abs(selectedRatio - referenceRatio) < 0.001) {
+      if (Math.abs(ratioValue - referenceRatio) < 0.001) {
         return "Matches 16:9";
       }
 
-      return selectedRatio > referenceRatio ? "Wider than 16:9" : "Taller than 16:9";
-    }
-
-    function formatRatioText() {
-      if (!isPositive(selectedRatio)) {
-        return "Enter a valid aspect ratio";
-      }
-
-      if (selectedRatioLabel === selectedDecimalLabel) {
-        return selectedRatioLabel;
-      }
-
-      return `${selectedRatioLabel} (${selectedDecimalLabel})`;
+      return ratioValue > referenceRatio ? "Wider than 16:9" : "Taller than 16:9";
     }
   });
 
@@ -330,6 +398,94 @@
     }
 
     return value.toFixed(2);
+  }
+
+  function buildKnownRatios(buttons) {
+    const seen = new Set();
+    const items = [];
+
+    buttons.forEach((button) => {
+      const ratio = parseRatio(button.dataset.ratio);
+      const label = button.dataset.ratioLabel;
+      const decimalLabel = button.dataset.decimalLabel;
+      const key = `${label}|${decimalLabel}`;
+
+      if (!isPositive(ratio) || seen.has(key)) {
+        return;
+      }
+
+      seen.add(key);
+      items.push({ ratio, label, decimalLabel });
+    });
+
+    return items;
+  }
+
+  function findKnownRatioLabel(ratioValue, ratioOptions) {
+    if (!isPositive(ratioValue)) {
+      return "";
+    }
+
+    let closest = null;
+
+    ratioOptions.forEach((option) => {
+      const difference = Math.abs(option.ratio - ratioValue);
+
+      if (!closest || difference < closest.difference) {
+        closest = { label: option.label, difference };
+      }
+    });
+
+    return closest && closest.difference < 0.01 ? closest.label : "";
+  }
+
+  function buildReducedRatioLabel(width, height) {
+    if (!Number.isInteger(width) || !Number.isInteger(height)) {
+      return "";
+    }
+
+    const divisor = greatestCommonDivisor(width, height);
+
+    if (!divisor) {
+      return "";
+    }
+
+    const reducedWidth = width / divisor;
+    const reducedHeight = height / divisor;
+
+    if (reducedWidth > 99 || reducedHeight > 99) {
+      return "";
+    }
+
+    return `${reducedWidth}:${reducedHeight}`;
+  }
+
+  function buildRatioDetails(ratio, label, decimalLabel) {
+    const text = label === decimalLabel ? label : `${label} (${decimalLabel})`;
+
+    return {
+      ratio,
+      label,
+      decimalLabel,
+      text,
+    };
+  }
+
+  function hasUsableRatio(ratioDetails) {
+    return Boolean(ratioDetails) && isPositive(ratioDetails.ratio);
+  }
+
+  function greatestCommonDivisor(a, b) {
+    let left = Math.abs(a);
+    let right = Math.abs(b);
+
+    while (right !== 0) {
+      const remainder = left % right;
+      left = right;
+      right = remainder;
+    }
+
+    return left;
   }
 
   function formatInteger(value) {

@@ -68,7 +68,7 @@
             <div class="calculator-heading">
               <div>
                 <p class="eyebrow">Calculator</p>
-                <h2 id="calculator-title">Enter one dimension and choose a ratio</h2>
+                <h2 id="calculator-title">Enter your dimensions and choose what to calculate</h2>
               </div>
             </div>
 
@@ -81,6 +81,10 @@
               <label>
                 <input type="radio" name="solve-for" value="height" checked>
                 <span>Y height</span>
+              </label>
+              <label>
+                <input type="radio" name="solve-for" value="ratio">
+                <span>Aspect ratio</span>
               </label>
             </fieldset>
 
@@ -95,6 +99,12 @@
                 <label for="height-value">Y height</label>
                 <input id="height-value" name="height" type="text" inputmode="numeric" autocomplete="off">
                 <p>Pixels tall.</p>
+              </div>
+
+              <div class="field-card" data-field="ratio">
+                <label for="ratio-value">Aspect ratio</label>
+                <input id="ratio-value" name="ratio" type="text" autocomplete="off" readonly>
+                <p>Selected or calculated from X and Y.</p>
               </div>
             </div>
 
@@ -122,7 +132,7 @@
 
             <dl class="result-list visualization-results">
               <div>
-                <dt>Selected ratio</dt>
+                <dt>Aspect ratio</dt>
                 <dd id="result-ratio">16:9 (1.78)</dd>
               </div>
               <div>
