@@ -860,6 +860,16 @@ h3 {
   }
 }
 
+@media (max-width: 820px) {
+  .aspect-solve-options {
+    grid-template-columns: 1fr;
+  }
+
+  .aspect-solve-options label {
+    justify-content: flex-start;
+  }
+}
+
 .visualization-card {
   display: grid;
   gap: 18px;
