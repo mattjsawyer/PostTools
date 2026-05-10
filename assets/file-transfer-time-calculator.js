@@ -25,13 +25,34 @@
     { group: "Thunderbolt / USB-C", name: "Thunderbolt 2", practicalMBps: 1400, spec: "20 Gb/s", note: "Practical rate for fast external storage over Thunderbolt 2." },
     { group: "Thunderbolt / USB-C", name: "Thunderbolt 3", practicalMBps: 2800, spec: "40 Gb/s", note: "Practical rate for fast storage on a full-bandwidth connection." },
     { group: "Thunderbolt / USB-C", name: "Thunderbolt 4", practicalMBps: 2800, spec: "40 Gb/s", note: "Same 40 Gb/s headline speed as Thunderbolt 3, with stricter platform requirements." },
-    { group: "Thunderbolt / USB-C", name: "Thunderbolt 5", practicalMBps: 6000, spec: "80 Gb/s", note: "Planning rate for next-generation storage transfer paths." },
+    {
+      group: "Thunderbolt / USB-C",
+      name: "Thunderbolt 5",
+      practicalMBps: 5500,
+      spec: "80 Gb/s",
+      note: "High-end Thunderbolt 5 SSD planning rate. Sustained writes may be lower after cache fills.",
+      resultDisclaimer: "Thunderbolt 5 speeds require a Thunderbolt 5 host, cable, and storage device. Some drives slow down during long writes after their cache fills.",
+    },
     { group: "USB", name: "USB 2.0", practicalMBps: 35, spec: "480 Mb/s", note: "Useful for legacy card readers and older shuttle drives." },
     { group: "USB", name: "USB 5Gbps / USB 3.x Gen 1", practicalMBps: 400, spec: "5 Gb/s", note: "Common USB-A and USB-C external drive connection." },
     { group: "USB", name: "USB 10Gbps / USB 3.1 Gen 2", practicalMBps: 900, spec: "10 Gb/s", note: "Common modern USB-C SSD and reader connection." },
     { group: "USB", name: "USB 20Gbps / USB 3.2 Gen 2x2", practicalMBps: 1700, spec: "20 Gb/s", note: "Requires compatible host, cable, and device support." },
-    { group: "USB", name: "USB 40Gbps / USB4", practicalMBps: 2800, spec: "40 Gb/s", note: "Planning rate for high-speed USB4 storage paths." },
-    { group: "USB", name: "USB 80Gbps", practicalMBps: 6000, spec: "80 Gb/s", note: "Planning rate for new high-speed USB transfer paths." },
+    {
+      group: "USB",
+      name: "USB 40Gbps / USB4",
+      practicalMBps: 3600,
+      spec: "40 Gb/s",
+      note: "Planning rate for modern USB4 40Gbps SSDs. Older 40Gbps devices may be closer to 2800 MB/s.",
+      resultDisclaimer: "USB4 performance varies heavily by enclosure, controller, cable, and host support. Older 40Gbps devices may transfer closer to Thunderbolt 3-class speeds.",
+    },
+    {
+      group: "USB",
+      name: "USB 80Gbps",
+      practicalMBps: 5500,
+      spec: "80 Gb/s",
+      note: "Top-tier USB 80Gbps planning rate. Requires full 80Gbps support across host, cable, enclosure, and drive.",
+      resultDisclaimer: "USB 80Gbps is highly dependent on device generation and cable quality. Real sustained writes can be lower than peak benchmark speeds.",
+    },
     { group: "NAS / Ethernet", name: "1 GbE NAS", practicalMBps: 110, spec: "1 GbE", note: "Typical planning rate for a gigabit NAS copy." },
     { group: "NAS / Ethernet", name: "2.5 GbE NAS", practicalMBps: 280, spec: "2.5 GbE", note: "Common small-studio NAS upgrade speed." },
     { group: "NAS / Ethernet", name: "5 GbE NAS", practicalMBps: 560, spec: "5 GbE", note: "Intermediate multi-gig Ethernet planning rate." },
@@ -42,9 +63,40 @@
     { group: "Media / Drives", name: "SD Express PCIe x1", practicalMBps: 800, spec: "up to 985 MB/s class", note: "Planning rate for SD Express cards and readers." },
     { group: "Media / Drives", name: "CFast 2.0", practicalMBps: 500, spec: "SATA 6 Gb/s", note: "Planning rate for CFast camera card offloads." },
     { group: "Media / Drives", name: "CFexpress Type A 2.0", practicalMBps: 800, spec: "PCIe Gen3 x1", note: "Planning rate for CFexpress Type A offloads." },
-    { group: "Media / Drives", name: "CFexpress Type B 2.0", practicalMBps: 1600, spec: "PCIe Gen3 x2", note: "Planning rate for CFexpress Type B 2.0 cards." },
+    {
+      group: "Media / Drives",
+      name: "CFexpress Type B 2.0 via 10Gbps reader",
+      practicalMBps: 950,
+      spec: "USB 10Gbps reader-limited",
+      note: "Common offload rate for CFexpress Type B cards through USB 3.2 Gen 2 readers.",
+      resultDisclaimer: "CFexpress Type B speed depends strongly on the reader. A 10Gbps reader may cap transfers around 900-1000 MB/s even when the card is faster.",
+    },
+    {
+      group: "Media / Drives",
+      name: "CFexpress Type B 2.0 via fast reader",
+      practicalMBps: 1600,
+      spec: "PCIe Gen3 x2",
+      note: "Planning rate for fast CFexpress Type B 2.0 cards with a reader that is not limited to 10Gbps.",
+      resultDisclaimer: "CFexpress Type B speed depends strongly on the reader. A 10Gbps reader may cap transfers around 900-1000 MB/s even when the card is faster.",
+    },
     { group: "Media / Drives", name: "CFexpress Type B 4.0", practicalMBps: 3200, spec: "PCIe Gen4 x2", note: "Planning rate for newer CFexpress Type B 4.0 cards." },
     { group: "Media / Drives", name: "SATA SSD", practicalMBps: 500, spec: "SATA 6 Gb/s", note: "Practical rate for a healthy SATA SSD." },
+    {
+      group: "Media / Drives",
+      name: "2.5-inch 5400 rpm portable HDD",
+      practicalMBps: 110,
+      spec: "up to 140 MB/s class",
+      note: "Common planning rate for bus-powered portable USB hard drives copying large files.",
+      resultDisclaimer: "Portable HDD speed varies by drive model, capacity, file mix, and disk fullness. Large sequential media files usually copy faster than folders with many small files.",
+    },
+    {
+      group: "Media / Drives",
+      name: "2.5-inch 7200 rpm mobile HDD",
+      practicalMBps: 145,
+      spec: "up to 160 MB/s class",
+      note: "Planning rate for faster 2.5-inch mobile hard drives in portable enclosures.",
+      resultDisclaimer: "Mobile HDD speed varies by drive model, enclosure, file mix, and disk fullness. Large sequential media files usually copy faster than folders with many small files.",
+    },
     { group: "Media / Drives", name: "7200 rpm HDD", practicalMBps: 180, spec: "drive-limited", note: "Planning rate for a single spinning hard drive." },
     { group: "Media / Drives", name: "NVMe PCIe 3.0 SSD", practicalMBps: 3000, spec: "PCIe 3.0 class", note: "Planning rate for fast PCIe 3.0 NVMe storage." },
     { group: "Media / Drives", name: "NVMe PCIe 4.0 SSD", practicalMBps: 5500, spec: "PCIe 4.0 class", note: "Planning rate for fast PCIe 4.0 NVMe storage." },
@@ -72,12 +124,14 @@
     const resultSpeed = document.getElementById("transfer-result-speed");
     const resultHourly = document.getElementById("transfer-result-hourly");
     const presetSummary = document.getElementById("transfer-preset-summary");
+    const presetDisclaimer = document.getElementById("transfer-preset-disclaimer");
+    const resultNote = document.getElementById("transfer-result-note");
 
     const presetGrid = document.getElementById("transfer-preset-grid");
     const presetCount = document.getElementById("transfer-preset-count");
     const presetSearch = document.getElementById("transfer-preset-search");
     const presetGroup = document.getElementById("transfer-preset-group");
-    let selectedPresetId = "transfer-preset-11";
+    let selectedPresetId = null;
 
     form.addEventListener("submit", (event) => event.preventDefault());
     [sizeInput, sizeUnit].forEach((control) => {
@@ -165,6 +219,10 @@
       presetSummary.textContent = preset
         ? `Using practical preset: ${preset.name} (${formatDataRate(preset.practicalMBps * 1000 ** 2)}).`
         : "";
+      presetDisclaimer.textContent = preset && preset.resultDisclaimer ? preset.resultDisclaimer : "";
+      resultNote.textContent = preset
+        ? "Practical rates are planning estimates. Actual transfers can be limited by the slowest device, cable, card reader, storage array, network load, or protocol overhead."
+        : "";
     }
 
     function setupPresetFilters() {
@@ -180,6 +238,7 @@
           preset.name,
           preset.spec,
           preset.note,
+          preset.resultDisclaimer || "",
         ].join(" ").toLowerCase();
 
         return (!query || haystack.includes(query))

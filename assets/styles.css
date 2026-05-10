@@ -650,6 +650,18 @@ h3 {
   font-weight: 800;
 }
 
+.preset-disclaimer {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.preset-summary:empty,
+.preset-disclaimer:empty,
+.result-note:empty {
+  display: none;
+}
+
 .result-note {
   margin: 18px 0 0;
   color: var(--muted);
